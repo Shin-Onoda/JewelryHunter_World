@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour
     //ゲームの状態
     public static GameState gameState;
     public string nextSceneName;            // 次のシーン名
+
+    //スコア追加
+    public static int totalScore;           //合計スコア
     void Start()
     {
         gameState = GameState.InGame;   //インゲームにする
