@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -10,20 +11,21 @@ public class UIController : MonoBehaviour
     public GameObject panel;            // パネル
     public GameObject restartButton;    // RESTARTボタン
     public GameObject nextButton;       // NEXTボタン
+    Image titleImage;                   // 画像を表示するImageコンポーネント
 
     // 時間制限追加
     public GameObject timeBar;          // 時間表示バー
     public GameObject timeText;         // 時間テキスト
-    TimeController timeController;      // TimeController
-    bool useTime = true;                // 時間制限を使うかどうかのフラグ
+    TimeController timeController;             // TimeController
+    bool useTime = true;               // 時間制限を使うかどうかのフラグ
 
     // プレイヤー情報
     GameObject player;
     PlayerController playerController;
 
-    //スコア追加
-    public GameObject scoreText;        //スコアテキスト
-    public int stageScore = 0;          //ステージスコア
+    // スコア追加
+    public GameObject scoreText;        // スコアテキスト
+    public int stageScore = 0;          // ステージスコア
 
     void Start()
     {
@@ -68,11 +70,20 @@ public class UIController : MonoBehaviour
             bt.interactable = false;
             mainImage.GetComponent<Image>().sprite = gameClearSpr;  // 画像を設定する
 
-            //時間カウントを停止
-            if(timeController != null)
+            // 時間カウントを停止
+            if (timeController != null)
             {
-                timeController.IsTimeOver();    //停止フラグをON
+                timeController.IsTimeOver(); //停止フラグ
+
+                // 整数に型変換することで小数を切り捨てる
+                int time = (int)timeController.GetDisplayTime();
+                GameManager.totalScore += time * 10; // 残り時間をスコアに加える
             }
+
+            GameManager.totalScore += stageScore; //トータルスコアの最終確定
+            stageScore = 0; //ステージスコアリセット
+
+            UpdateScore();  //スコア表示の更新
         }
         else if (GameManager.gameState == GameState.GameOver)
         {
@@ -84,42 +95,35 @@ public class UIController : MonoBehaviour
             bt.interactable = false;
             mainImage.GetComponent<Image>().sprite = gameOverSpr;       // 画像を設定する
 
-            //時間カウントを停止
+            // 時間カウントを停止
             if (timeController != null)
             {
-                timeController.IsTimeOver();    //停止フラグをON
-
-                // 整数に型変換することで小数点を切り捨て
-                int time = (int)
-                    timeController.GetDisplayTime();
-                GameManager.totalScore += time * 10;    //残り時間をスコアに加える
+                timeController.IsTimeOver(); //停止フラグ
             }
 
-            GameManager.totalScore += stageScore;   //トータルスコアの最終確定
-            stageScore = 0; //ステージスコアリセット
-
-            UpdateScore();  //スコア表示の更新
-
         }
-        else if(GameManager.gameState == GameState.InGame)
+        else if (GameManager.gameState == GameState.InGame) // ゲーム中
         {
-            if(player == null) { return; }
+            if (player == null) { return; } //プレイヤー消滅後は何もしない
 
-            //タイムを更新する
-            if(timeController != null && useTime)
+            // タイムを更新する
+            if (timeController != null)
             {
-                // float型のUI用表示変数を取得し、整数に型変換することで小数を切り捨てる
-                int time = (int)timeController.GetDisplayTime();
-                // タイム更新
-                timeText.GetComponent<TextMeshProUGUI>().text = time.ToString();
+                if (timeController.gameTime >= 0.0f)
+                {
+                    // float型のUI用表示変数を取得し、整数に型変換することで小数を切り捨てる
+                    int time = (int)timeController.GetDisplayTime();
+                    // タイム更新
+                    timeText.GetComponent<TextMeshProUGUI>().text = time.ToString();
 
-                if (useTime && timeController.isCountDown && time <= 0) //カウントダウンモードで時間が0なら
-                {
-                    playerController.GameOver(); // ゲームオーバーにする
-                }
-                else if (useTime && !timeController.isCountDown && time >= timeController.gameTime) //カウントアップモードで制限時間を超えたら
-                {
-                    playerController.GameOver(); // ゲームオーバーにする 
+                    if (useTime && timeController.isCountDown && time <= 0) //カウントダウンモードで時間が0なら
+                    {
+                        playerController.GameOver(); // ゲームオーバーにする
+                    }
+                    else if (useTime && !timeController.isCountDown && time >= timeController.gameTime) //カウントアップモードで制限時間を超えたら
+                    {
+                        playerController.GameOver(); // ゲームオーバーにする 
+                    }
                 }
             }
         }
