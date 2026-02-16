@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour
     public AudioClip meGameOver;
     AudioSource soundPlayer;
 
+    public bool isGameClear = false;
+    public bool isGameOver = false;
+
     void Start()
     {
         gameState = GameState.InGame;   //インゲームにする
@@ -39,12 +42,14 @@ public class GameManager : MonoBehaviour
         {
             soundPlayer.Stop();
             soundPlayer.PlayOneShot(meGameClear);
+            isGameClear = true;
             gameState = GameState.GameEnd;
         }
         else if(gameState == GameState.GameOver)
         {
             soundPlayer.Stop();
             soundPlayer.PlayOneShot(meGameOver);
+            isGameOver = true;
             gameState = GameState.GameEnd;
         }
     }
@@ -59,5 +64,17 @@ public class GameManager : MonoBehaviour
     public void Next()
     {
         SceneManager.LoadScene(nextSceneName);
+    }
+
+    public void GameEnd()
+    {
+        //UI表示が終わって最後の状態であれば
+        if(gameState == GameState.GameEnd)
+        {
+            //ゲームクリア状態なら
+            if (isGameClear) { Next(); }
+            //ゲームオーバー状態なら
+            else if (isGameOver) { Restart(); }
+        }
     }
 }

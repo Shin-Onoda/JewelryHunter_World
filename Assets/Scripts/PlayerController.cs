@@ -26,13 +26,40 @@ public class PlayerController : MonoBehaviour
 
     public int score = 0; //スコア
 
+    InputAction moveAction; //Moveアクション
+    InputAction jumpAction; //Jumpアクション
+    PlayerInput input;      //PlayerInputコンポーネント
+
+    GameManager gm;
+
+    void OnMove(InputValue value)
+    {
+        Vector2 moveInput = value.Get<Vector2>();
+        axisH = moveInput.x;
+    }
+
+    void OnJump(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            goJump = true;
+        }
+    }
 
     void Start()
     {
-        rbody = this.GetComponent<Rigidbody2D>();   //Rigidbody2Dを取ってくる
+        rbody = GetComponent<Rigidbody2D>();   //Rigidbody2Dを取ってくる
         animator = GetComponent<Animator>();        // Animator を取ってくる
         nowAnime = stopAnime;                       // 停止から開始する
         oldAnime = stopAnime;                       // 停止から開始する
+
+        input = GetComponent<PlayerInput>();
+        moveAction = input.currentActionMap.FindAction("Move");
+        jumpAction = input.currentActionMap.FindAction("Jump");
+        InputActionMap uiMap = input.actions.FindActionMap("UI");
+        uiMap.Disable();
+
+        gm = GameObject.FindFirstObjectByType<GameManager>();
     }
 
     // Update is called once per frame
@@ -49,13 +76,15 @@ public class PlayerController : MonoBehaviour
                                         Vector2.down,          // 発射方向
                                         0.0f,                  // 発射距離
                                         groundLayer);          // 検出するレイヤー
-        if (Input.GetButtonDown("Jump"))                         //キャラクターをジャンプさせる
+        //if (Input.GetButtonDown("Jump"))                         //キャラクターをジャンプさせる
+        if(jumpAction.WasPressedThisFrame())
         {
             goJump = true;  //ジャンプフラグを立てる
         }
 
         //水平方向の入力をチェックする
-        axisH = Input.GetAxisRaw("Horizontal");
+        //axisH = Input.GetAxisRaw("Horizontal");
+        axisH = moveAction.ReadValue<Vector2>().x;
 
         if (axisH > 0.0f)                           // 向きの調整
         {
@@ -163,7 +192,21 @@ public class PlayerController : MonoBehaviour
     void GameStop()
     {
         rbody.linearVelocity = new Vector2(0, 0);   //ゲーム停止時速度を0にする
+
+        input.currentActionMap.Disable();
+        input.SwitchCurrentActionMap("UI");
+        input.currentActionMap.Enable();
     }
+
+    //UI表示にSubmitボタンが押されたら
+    void OnSubmit(InputValue value)
+    {
+        if(GameManager.gameState != GameState.InGame)
+        {
+            gm.GameEnd();
+        }
+    }
+
     //プレイヤーのaxisH()の値を取得
     public float GetAxisH()
     {
