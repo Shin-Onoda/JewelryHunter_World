@@ -26,9 +26,16 @@ public class GameManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
-        
+        if(gameState == GameState.GameClear)
+        {
+            gameState = GameState.GameEnd;
+        }
+        else if(gameState == GameState.GameOver)
+        {
+            gameState = GameState.GameEnd;
+        }
     }
 
     //リスタート
