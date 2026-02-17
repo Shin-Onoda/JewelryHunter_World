@@ -106,7 +106,7 @@ public class MovingBlock : MonoBehaviour
         }
     }
     //移動範囲表示
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         Vector2 fromPos;
         if (startPos == Vector3.zero)

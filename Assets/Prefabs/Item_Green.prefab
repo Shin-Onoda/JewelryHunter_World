@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 164651465185779672}
   - component: {fileID: 2957158160223388038}
   - component: {fileID: 1288974358945733922}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Item_Green
   m_TagString: ScoreItem
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 506777212851872085, guid: 8e4f6a39320a9a74f9aa87c50737e5cb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

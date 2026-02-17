@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: e6eab2ffa17b66d489ae111f60ab1489
+guid: b0a8e0db27d48f9468cc6fb2193c9770
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4801227835787818748
-    second: enemy1_0
+      213: 2906146566957723068
+    second: bt_gamestart_0
+  - first:
+      213: 3508449044776061463
+    second: bt_gamestart_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,10 +49,10 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 7
+  alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -100,13 +103,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: enemy1_0
+      name: bt_gamestart_0
       rect:
         serializedVersion: 2
-        x: 4
-        y: 1
-        width: 149
-        height: 130
+        x: 8
+        y: 8
+        width: 353
+        height: 124
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +118,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: cf6b9d5574361a240800000000000000
-      internalID: 4801227835787818748
+      spriteID: cbd6cbcb7e4b45820800000000000000
+      internalID: 2906146566957723068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bt_gamestart_1
+      rect:
+        serializedVersion: 2
+        x: 403
+        y: 8
+        width: 395
+        height: 124
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71a8f6251d380b030800000000000000
+      internalID: 3508449044776061463
       vertices: []
       indices: 
       edges: []
@@ -125,7 +150,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +160,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      enemy1_0: 4801227835787818748
+      bt_gamestart_0: 2906146566957723068
+      bt_gamestart_1: 3508449044776061463
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

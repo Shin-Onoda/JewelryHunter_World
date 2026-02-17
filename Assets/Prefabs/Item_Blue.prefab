@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2779356058407927963}
   - component: {fileID: 5311636434427964933}
   - component: {fileID: 6247563037128964078}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Item_Blue
   m_TagString: ScoreItem
   m_Icon: {fileID: 0}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: -3244114122435731308, guid: b580de9b98e532144af3cb46e459d995, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
