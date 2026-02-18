@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -29,10 +30,24 @@ public class GameManager : MonoBehaviour
     public bool isGameClear = false;
     public bool isGameOver = false;
 
-    void Start()
+    public static int currentDoorNumber = 0;
+    public static int keys = 1;
+    public Dictionary<string, bool> keyGot;
+    public static int arrows = 10;
+
+    void Awake()
     {
         gameState = GameState.InGame;   //ÉCÉìÉQÅ[ÉÄÇ…Ç∑ÇÈ
         soundPlayer = GetComponent<AudioSource>();
+
+        if(keyGot == null)
+        {
+            keyGot = new Dictionary<string, bool>();
+        }
+        if (!(keyGot.ContainsKey(SceneManager.GetActiveScene().name)))
+        {
+            keyGot.Add(SceneManager.GetActiveScene().name, false);
+        }
     }
 
     // Update is called once per frame
