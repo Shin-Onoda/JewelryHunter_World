@@ -14,7 +14,17 @@ public class World_PlayerController : MonoBehaviour
     float angleZ;
     Rigidbody2D rbody;
     Animator animator;
+    bool isAtionButtonPressed;
+    public bool IsActionButtonPressed
+    {
+        get { return isAtionButtonPressed; }
+        set { isAtionButtonPressed = value; }
+    }
 
+    void OnActionButton(InputValue value)
+    {
+        IsActionButtonPressed = value.isPressed;
+    }
     void OnMove(InputValue value)
     {
         moveVec = value.Get<Vector2>();
