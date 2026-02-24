@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms.Impl;
@@ -32,6 +33,20 @@ public class PlayerController : MonoBehaviour
 
     GameManager gm;
 
+    public static int playerLife = 10;
+    bool inDamage;          //ダメージ管理フラグ
+
+    public float shootSpeed = 12.0f;
+    public float shootDelay = 0.25f;
+    public GameObject arrowPrefab;
+    public GameObject gate;
+
+    public static void PlayerRecovery(int life)
+    {
+        playerLife += life;
+        if (playerLife > 10) playerLife = 10;
+    }
+
     void OnMove(InputValue value)
     {
         Vector2 moveInput = value.Get<Vector2>();
@@ -46,6 +61,47 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    //UI表示にSubmitボタンが押されたら
+    void OnSubmit(InputValue value)
+    {
+        if (GameManager.gameState != GameState.InGame)
+        {
+            gm.GameEnd();
+        }
+    }
+
+    void OnAttack(InputValue value)
+    {
+        if (GameManager.arrows > 0)
+        {
+            ShootArrow();
+        }
+    }
+
+    void ShootArrow()
+    {
+        GameManager.arrows--;
+        Quaternion r;
+        if(transform.localScale.x > 0)
+        {
+            r = Quaternion.Euler(0, 0, 0);
+        }
+        else
+        {
+            r = Quaternion.Euler(0, 0, 180);
+        }
+
+        GameObject arrowObj = Instantiate(
+            arrowPrefab,
+            gate.transform.position,
+            r);
+        Rigidbody2D arrowRbody =
+            arrowObj.GetComponent<Rigidbody2D>();
+        arrowRbody.AddForce(new Vector2
+            (transform.localScale.x, 0) * shootSpeed,
+            ForceMode2D.Impulse);
+
+    }
     void Start()
     {
         rbody = GetComponent<Rigidbody2D>();   //Rigidbody2Dを取ってくる
@@ -60,13 +116,28 @@ public class PlayerController : MonoBehaviour
         uiMap.Disable();
 
         gm = GameObject.FindFirstObjectByType<GameManager>();
+
+        playerLife = 10;    //体力を初期値にリセット
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(GameManager.gameState != GameState.InGame)
+        if(GameManager.gameState != GameState.InGame || inDamage)
         {
+            //もしダメージ管理フラグが立っていたら点滅処理
+            if (inDamage)
+            {
+                float val = Mathf.Sin(Time.time * 50);
+                if(val > 0)
+                {
+                    GetComponent<SpriteRenderer>().enabled = true;
+                }
+                else
+                {
+                    GetComponent<SpriteRenderer>().enabled = false;
+                }
+            }
             return;
         }
 
@@ -122,9 +193,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameManager.gameState != GameState.InGame)
+        if (GameManager.gameState != GameState.InGame || inDamage)
         {
-            return;
+            return; //Updateを中断
         }
 
         if (onGround || axisH != 0) //地面の上 or 速度が0ではない
@@ -167,6 +238,13 @@ public class PlayerController : MonoBehaviour
             score = 0; //次に備えてスコアをリセット
             Destroy(collision.gameObject);              // アイテム削除する
         }
+        else if(collision.gameObject.tag == "Enemy")
+        {
+            if (!inDamage)  //ダメージ中でなければ
+            {
+                GetDamage(collision.gameObject);
+            }
+        }
     }
     //ゴール
     public void Goal()
@@ -198,18 +276,34 @@ public class PlayerController : MonoBehaviour
         input.currentActionMap.Enable();
     }
 
-    //UI表示にSubmitボタンが押されたら
-    void OnSubmit(InputValue value)
-    {
-        if(GameManager.gameState != GameState.InGame)
-        {
-            gm.GameEnd();
-        }
-    }
-
     //プレイヤーのaxisH()の値を取得
     public float GetAxisH()
     {
         return axisH;
+    }
+
+    void GetDamage(GameObject target)
+    {
+        if (GameManager.gameState == GameState.InGame)
+        {
+            playerLife -= 1;
+            if (playerLife > 0)
+            {
+                rbody.linearVelocity = new Vector2(0, 0);
+                Vector3 v = (transform.position - target.transform.position).normalized;
+                rbody.AddForce(new Vector2(v.x * 4, v.y * 4), ForceMode2D.Impulse);
+                inDamage = true;
+                Invoke("DamageEnd", 0.25f);
+            }
+            else
+            {
+                GameOver();
+            }
+        }
+    }
+    void DamageEnd()
+    {
+        inDamage = false;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 }

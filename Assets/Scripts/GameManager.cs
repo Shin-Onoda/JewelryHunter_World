@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
 
     public static int currentDoorNumber = 0;
     public static int keys = 1;
-    public Dictionary<string, bool> keyGot;
+    public static Dictionary<string, bool> keyGot;
     public static int arrows = 10;
 
     void Awake()
@@ -78,6 +78,7 @@ public class GameManager : MonoBehaviour
     //ŽŸ‚Ö
     public void Next()
     {
+        SaveDataManager.SaveGamedata();
         SceneManager.LoadScene(nextSceneName);
     }
 

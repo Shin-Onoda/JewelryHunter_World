@@ -27,6 +27,13 @@ public class UIController : MonoBehaviour
     public GameObject scoreText;        // スコアテキスト
     public int stageScore = 0;          // ステージスコア
 
+    public TextMeshProUGUI keyText;
+    int currentKeys;
+    public TextMeshProUGUI arrowText;
+    int currentArrows;
+    public Slider lifeSlider;
+    int currentLife;
+
     void Start()
     {
         Invoke("InactiveImage", 1.0f);  // 1秒後に画像を非表示にする
@@ -126,6 +133,23 @@ public class UIController : MonoBehaviour
                     }
                 }
             }
+        }
+
+        //矢と鍵の情報更新
+        if (currentKeys != GameManager.keys)
+        {
+            currentKeys = GameManager.keys;
+            keyText.text = currentKeys.ToString();
+        }
+        if (currentArrows != GameManager.arrows)
+        {
+            currentArrows = GameManager.arrows;
+            arrowText.text = currentArrows.ToString();
+        }
+        if (currentLife != PlayerController.playerLife)
+        {
+            currentLife = PlayerController.playerLife;
+            lifeSlider.value = currentLife;
         }
     }
 

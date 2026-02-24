@@ -1,10 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class TitleManager : MonoBehaviour
 {
     public string sceneName;
+
+    public GameObject startButton;      //スタートボタンオブジェクト
+    public GameObject continueButton;   //コンテニューボタンオブジェクト
 
     //public InputAction submitAction;
 
@@ -16,10 +20,15 @@ public class TitleManager : MonoBehaviour
     //{
     //    submitAction.Disable();
     //}
-    //void Start()
-    //{
-    //    
-    //}
+    void Start()
+    {
+        string jsonData = PlayerPrefs.GetString("SaveData");
+
+        if(string.IsNullOrEmpty(jsonData))
+        {
+            continueButton.GetComponent<Button>().interactable = false;
+        }
+    }
 
     void OnSubmit(InputValue valuse)
     {
@@ -45,7 +54,15 @@ public class TitleManager : MonoBehaviour
 
     public void Load()
     {
-        GameManager.totalScore = 0; //新しくゲームを始めるにあたってスコアをリセット
+        SaveDataManager.Initialize();
+        //GameManager.totalScore = 0; //新しくゲームを始めるにあたってスコアをリセット
+        SceneManager.LoadScene(sceneName);
+
+    }
+
+    public void ContinueLoad()
+    {
+        SaveDataManager.LoadGameData();
         SceneManager.LoadScene(sceneName);
     }
 }
