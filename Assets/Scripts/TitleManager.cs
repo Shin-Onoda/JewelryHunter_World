@@ -28,6 +28,9 @@ public class TitleManager : MonoBehaviour
         {
             continueButton.GetComponent<Button>().interactable = false;
         }
+
+        SoundManager.currentSoundManager.StopBGM();
+        SoundManager.currentSoundManager.PlayBGM(BGMType.Title);
     }
 
     void OnSubmit(InputValue valuse)

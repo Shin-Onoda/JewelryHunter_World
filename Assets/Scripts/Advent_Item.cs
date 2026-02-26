@@ -29,6 +29,7 @@ public class Advent_Item : MonoBehaviour
             switch (type)
             {
                 case AdventItemType.Arrow:
+                    ArrowGenerator.isRecover = false;
                     GameManager.arrows += numberOfArrow;
                     break;
                 case AdventItemType.Key:
@@ -41,6 +42,8 @@ public class Advent_Item : MonoBehaviour
             }
 
             // アイテムゲット演出
+            SoundManager.currentSoundManager.PlaySE(SEType.ItemGet);
+
             GetComponent<CircleCollider2D>().enabled = false;      // 当たりを消す
             Rigidbody2D rbody = GetComponent<Rigidbody2D>();
             rbody.gravityScale = 1.0f; //重力を戻す

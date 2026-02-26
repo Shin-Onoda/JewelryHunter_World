@@ -113,6 +113,8 @@ public class EnemyController : MonoBehaviour
 
                 if (enemyLife <= 0)
                 {
+                    SoundManager.currentSoundManager.PlaySE(SEType.Enemykilled);
+
                     rbody.linearVelocity = Vector2.zero;
                     GetComponent<CircleCollider2D>().enabled = false;
                     rbody.AddForce(new Vector2(0, 3), ForceMode2D.Impulse);

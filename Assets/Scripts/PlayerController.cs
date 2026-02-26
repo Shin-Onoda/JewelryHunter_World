@@ -80,6 +80,8 @@ public class PlayerController : MonoBehaviour
 
     void ShootArrow()
     {
+        SoundManager.currentSoundManager.PlaySE(SEType.Shoot);
+
         GameManager.arrows--;
         Quaternion r;
         if(transform.localScale.x > 0)
@@ -227,6 +229,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (collision.gameObject.tag == "ScoreItem")
         {
+            SoundManager.currentSoundManager.PlaySE(SEType.ItemGet);
             // スコアアイテム
             ScoreItem item = collision.gameObject.GetComponent<ScoreItem>();  // ScoreItemを得る			
             score = item.itemdata.value;                // スコアを得る
@@ -286,6 +289,8 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.gameState == GameState.InGame)
         {
+            SoundManager.currentSoundManager.PlaySE(SEType.GetDamage);
+
             playerLife -= 1;
             if (playerLife > 0)
             {

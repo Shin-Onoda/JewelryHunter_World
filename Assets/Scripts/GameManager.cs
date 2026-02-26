@@ -50,21 +50,52 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        string currentScene = SceneManager.GetActiveScene().name;
+
+        if (currentScene != "WorldMap")
+        {
+            SoundManager.currentSoundManager.restartBGM = true;
+            if (currentScene == "Boss")
+            {
+                SoundManager.currentSoundManager.StopBGM();
+                SoundManager.currentSoundManager.PlayBGM(BGMType.InBoss);
+            }
+            else
+            {
+                SoundManager.currentSoundManager.StopBGM();
+                SoundManager.currentSoundManager.PlayBGM(BGMType.InGame);
+            }
+        }
+        else if (SoundManager.currentSoundManager.restartBGM)
+        {
+            SoundManager.currentSoundManager.StopBGM();
+            SoundManager.currentSoundManager.PlayBGM(BGMType.Title);
+        }
+    }
     // Update is called once per frame
     void LateUpdate()
     {
         if(gameState == GameState.GameClear)
         {
-            soundPlayer.Stop();
-            soundPlayer.PlayOneShot(meGameClear);
+            //soundPlayer.Stop();
+            SoundManager.currentSoundManager.StopBGM();
+            SoundManager.currentSoundManager.PlayBGM(BGMType.GameClear);
+            //soundPlayer.PlayOneShot(meGameClear);
             isGameClear = true;
+            Invoke("GameStatusChange", 0.02f);
             gameState = GameState.GameEnd;
         }
         else if(gameState == GameState.GameOver)
         {
-            soundPlayer.Stop();
-            soundPlayer.PlayOneShot(meGameOver);
+            //soundPlayer.Stop();
+            //soundPlayer.PlayOneShot(meGameOver);
+            SoundManager.currentSoundManager.StopBGM();
+            SoundManager.currentSoundManager.PlayBGM(BGMType.GameOver);
+
             isGameOver = true;
+            Invoke("GameStatusChange", 0.02f);
             gameState = GameState.GameEnd;
         }
     }
