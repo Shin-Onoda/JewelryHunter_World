@@ -100,7 +100,7 @@ public class SaveDataManager : MonoBehaviour
         PlayerPrefs.DeleteAll(); //全部消す
         GameManager.currentDoorNumber = 0;
         GameManager.totalScore = 0;
-        GameManager.keys = 0;
+        GameManager.keys = 1;
         if (GameManager.keyGot != null)
         {
             GameManager.keyGot.Clear(); //ディクショナリーを削除

@@ -56,11 +56,9 @@ public class SoundManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    void Start()
-    {
         audios = GetComponents<AudioSource>();
+
     }
 
     // Update is called once per frame

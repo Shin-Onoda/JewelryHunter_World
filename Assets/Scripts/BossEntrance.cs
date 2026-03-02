@@ -4,10 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class BossEntrance : MonoBehaviour
 {
-    public static Dictionary<int, bool> stagesClear;
+    //public static Dictionary<int, bool> stagesClear;
+    public static Dictionary<int, bool> stagesClear = new Dictionary<int, bool>();
     public string sceneName;
     bool isOpened;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    /*
     void Start()
     {
         GameObject[] obj = GameObject.FindGameObjectsWithTag("Entrance");
@@ -41,6 +43,39 @@ public class BossEntrance : MonoBehaviour
                 }
             }
             if(sum >= obj.Length)
+            {
+                GetComponent<SpriteRenderer>().enabled = false;
+                isOpened = true;
+            }
+        }
+    }
+    */
+
+    void Start()
+    {
+        GameObject[] obj = GameObject.FindGameObjectsWithTag("Entrance");
+
+        // 初回構築（空なら作る）
+        if (stagesClear.Count == 0)
+        {
+            for (int i = 0; i < obj.Length; i++)
+            {
+                var ec = obj[i].GetComponent<EntranceController>();
+                if (ec != null && !stagesClear.ContainsKey(ec.doorNumber))
+                    stagesClear.Add(ec.doorNumber, false);
+            }
+        }
+        else
+        {
+            int sum = 0;
+            for (int i = 0; i < obj.Length; i++)
+            {
+                var ec = obj[i].GetComponent<EntranceController>();
+                if (ec != null && stagesClear.TryGetValue(ec.doorNumber, out var cleared) && cleared)
+                    sum++;
+            }
+
+            if (sum >= obj.Length)
             {
                 GetComponent<SpriteRenderer>().enabled = false;
                 isOpened = true;
